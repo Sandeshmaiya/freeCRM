@@ -10,8 +10,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import com.crm.qa.util.TestUtil;
+import com.crm.qa.util.WebEventListener;
 import com.crm.qa.util.Xls_Reader;
 
 public class TestBase {
@@ -20,6 +22,9 @@ public class TestBase {
 	public static Properties prop;	
 	
 	public static Xls_Reader reader ;
+	static EventFiringWebDriver e_driver;
+	
+	static WebEventListener eventListener;
 
 
 	public TestBase() {
@@ -47,6 +52,12 @@ public class TestBase {
 			System.setProperty("webdriver.chrome.driver",
 					"C:/Sandesh/Selenium Downloded/chromedriver_win32/chromedriver.exe");
 			driver = new ChromeDriver();
+			e_driver = new EventFiringWebDriver(driver);
+					
+			eventListener = new WebEventListener();
+			e_driver.register(eventListener);
+			driver=e_driver;
+			
 			reader= new Xls_Reader(System.getProperty("user.dir")+ "/src/main/java/com/crm/qa/util/testing_excel.xlsx");
 		} else if (browserName.equals("FF")) {
 			System.setProperty("webdriver.gecko.driver",
